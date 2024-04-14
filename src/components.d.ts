@@ -9,10 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
-    ImageViewerDialog: typeof import('./components/ImageViewerDialog.vue')['default']
-    InputForm: typeof import('./components/InputForm.vue')['default']
-    QRCodeDialog: typeof import('./components/QRCodeDialog.vue')['default']
-    QRCodeList: typeof import('./components/QRCodeList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
