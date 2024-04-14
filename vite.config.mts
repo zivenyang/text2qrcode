@@ -14,6 +14,9 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitejs.dev/config/
 export default defineConfig({
   base:'/text2qrcode/',
+  build: {
+    outDir: 'docs' // 修改为您的 docs 目录路径
+  },
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts',
