@@ -6,6 +6,8 @@ import Layouts from 'vite-plugin-vue-layouts'
 import Vue from '@vitejs/plugin-vue'
 import VueRouter from 'unplugin-vue-router/vite'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import copy from 'rollup-plugin-copy';
+import { resolve } from 'path';
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -55,6 +57,14 @@ export default defineConfig({
           styles: 'wght@100;300;400;500;700;900',
         }],
       },
+    }),
+    copy({
+      targets: [
+        { src: '.nojekyll', dest: 'docs' },
+        // 添加其他需要复制的文件
+      ],
+      verbose: true, // 是否输出详细日志
+      flatten: false, // 是否保持源文件夹结构
     }),
   ],
   define: { 'process.env': {} },

@@ -23,7 +23,7 @@
       —
       <a
         class="text-decoration-none on-surface"
-        href="https://vuetifyjs.com/about/licensing/"
+        href="https://github.com/zivenyang/text2qrcode/blob/main/LICENSE"
         rel="noopener noreferrer"
         target="_blank"
       >
