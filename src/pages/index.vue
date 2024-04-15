@@ -6,15 +6,19 @@
           v-model="inputText"
           label="输入文本"
           :counter="1000"
-          rows="5"
+          rows="10"
           outlined
           clearable
+          required
+          :rules="[v => !!v || '请输入文本']"
         ></v-textarea>
 
         <v-radio-group v-model="mode" row>
           <v-radio
             :label="segmentedLabel"
             :value="SEGMENTED_MODE"
+          required
+          :rules="[v => !!v || '请选择模式']"
           ></v-radio>
           <v-radio
             :label="lineLabel"
@@ -27,8 +31,12 @@
           label="分段大小"
           type="number"
           min="1"
+          max="1024"
           outlined
           :disabled="mode !== SEGMENTED_MODE"
+          required
+          :rules="[v => !!v || '请输入分段大小']"
+
         ></v-text-field>
 
         <v-text-field
@@ -38,6 +46,8 @@
           min="1"
           outlined
           :disabled="mode !== LINE_MODE"
+          required
+          :rules="[v => !!v || '请输入行数大小']"
         ></v-text-field>
 
         <v-btn @click="convertText" color="primary">生成二维码</v-btn>
@@ -64,7 +74,7 @@
     </v-row>
 
     <!-- Dialog for QR Code Image -->
-    <v-dialog v-model="dialogQRCode" max-width="800">
+    <v-dialog v-model="dialogQRCode" max-width="800" >
       <v-carousel v-model="selectedQRIndex" hide-delimiters progress="primary">
         <v-carousel-item v-for="(qrCode, index) in qrCodes" :key="index">
           <v-row justify="center">
@@ -80,14 +90,12 @@
             <v-card-text>第 {{ index + 1 }} 段/行</v-card-text>
             <v-divider></v-divider>
             <v-card-text>{{ qrText[index] }}</v-card-text>
+            <v-card-actions class="qr-code-actions">
+        <v-btn color="primary" @click="downloadQRCode">下载二维码</v-btn>
+      </v-card-actions>
           </v-card>
         </v-carousel-item>
       </v-carousel>
-
-      <!-- Navigation buttons -->
-      <v-card-actions class="qr-code-actions">
-        <v-btn color="primary" @click="downloadQRCode">下载二维码</v-btn>
-      </v-card-actions>
     </v-dialog>
 
   </v-container>
@@ -104,8 +112,8 @@ const LINE_MODE = 'line' as const;
 
 const inputText = ref<string>('');
 const mode = ref<typeof SEGMENTED_MODE>(SEGMENTED_MODE);
-const segmentSize = ref<number>(512);
-const lineSize = ref<number>(5);
+const segmentSize = ref<number>(128);
+const lineSize = ref<number>(1);
 const qrCodes = ref<string[]>([]);
 const qrText = ref<string[]>([]);
 const selectedQRIndex = ref<number>(0);
@@ -127,9 +135,12 @@ const convertText = async () => {
   }
 
   for (const segment of segments) {
-    const qrCode = await QRCode.toDataURL(segment);
+    if (segment) {
+      const qrCode = await QRCode.toDataURL(segment);
     qrCodes.value.push(qrCode);
     qrText.value.push(segment);
+    }
+
   }
 };
 
