@@ -5,8 +5,8 @@
         <v-textarea
           v-model="inputText"
           label="输入文本"
-          :counter="5000"
-          rows="6"
+          rows="7"
+          counter
           outlined
           clearable
           required
