@@ -2,97 +2,48 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="6">
-        <v-textarea
-          v-model="inputText"
-          label="输入文本"
-          rows="7"
-          counter
-          outlined
-          clearable
-          required
-          :rules="[v => !!v || '请输入文本']"
-        ></v-textarea>
+        <v-textarea v-model="inputText" label="输入文本" rows="7" counter outlined clearable required
+          :rules="[v => !!v || '请输入文本']"></v-textarea>
 
         <v-radio-group v-model="mode" row>
-          <v-radio
-            :label="segmentedLabel"
-            :value="SEGMENTED_MODE"
-          required
-          :rules="[v => !!v || '请选择模式']"
-          ></v-radio>
-          <v-radio
-            :label="lineLabel"
-            :value="LINE_MODE"
-          ></v-radio>
+          <v-radio :label="segmentedLabel" :value="SEGMENTED_MODE" required :rules="[v => !!v || '请选择模式']"></v-radio>
+          <v-radio :label="lineLabel" :value="LINE_MODE"></v-radio>
         </v-radio-group>
 
-        <v-text-field
-          v-model.number="segmentSize"
-          label="分段大小"
-          type="number"
-          min="1"
-          max="1024"
-          outlined
-          :disabled="mode !== SEGMENTED_MODE"
-          required
-          :rules="[v => !!v || '请输入分段大小']"
+        <v-text-field v-model.number="segmentSize" label="分段大小" type="number" min="1" max="1024" outlined
+          :disabled="mode !== SEGMENTED_MODE" required :rules="[v => !!v || '请输入分段大小']"></v-text-field>
 
-        ></v-text-field>
-
-        <v-text-field
-          v-model.number="lineSize"
-          label="行数大小"
-          type="number"
-          min="1"
-          outlined
-          :disabled="mode !== LINE_MODE"
-          required
-          :rules="[v => !!v || '请输入行数大小']"
-        ></v-text-field>
+        <v-text-field v-model.number="lineSize" label="行数大小" type="number" min="1" outlined
+          :disabled="mode !== LINE_MODE" required :rules="[v => !!v || '请输入行数大小']"></v-text-field>
 
         <v-btn @click="convertText" color="primary">生成二维码</v-btn>
       </v-col>
 
       <v-col cols="12" md="6">
         <v-row v-if="qrCodes.length > 0">
-          <v-col
-            v-for="(qrCode, index) in qrCodes"
-            :key="index"
-            cols="4"
-            @click="openQRCodeDialog(index)"
-          >
-            <v-img
-              :src="qrCode"
-              :alt="'QR Code ' + (index + 1)"
-              class="qr-code-image"
-              contain
-              tile
-            ></v-img>
+          <v-col v-for="(qrCode, index) in qrCodes" :key="index" cols="4" @click="openQRCodeDialog(index)">
+            <v-img :src="qrCode" :alt="'QR Code ' + (index + 1)" class="qr-code-image" contain tile></v-img>
           </v-col>
         </v-row>
       </v-col>
     </v-row>
 
     <!-- Dialog for QR Code Image -->
-    <v-dialog v-model="dialogQRCode" max-width="800" >
+    <v-dialog v-model="dialogQRCode" max-width="800">
       <v-carousel v-model="selectedQRIndex" hide-delimiters progress="primary">
         <v-carousel-item v-for="(qrCode, index) in qrCodes" :key="index">
           <v-row justify="center">
-            <v-col cols="12" sm="8" md="6">
-              <v-img
-                :src="qrCode"
-                :alt="'QR Code ' + (selectedQRIndex + 1)"
-                contain
-              ></v-img>
+            <v-col cols="12" sm="6" md="6">
+              <v-img :src="qrCode" :alt="'QR Code ' + (selectedQRIndex + 1)"></v-img>
             </v-col>
           </v-row>
-          <v-card  elevation="12">
+          <v-card>
             <v-card-text>第 {{ index + 1 }} 段/行</v-card-text>
             <v-divider></v-divider>
             <v-card-text>{{ qrText[index] }}</v-card-text>
             <v-card-actions class="qr-code-actions">
-        <v-btn color="primary" @click="downloadQRCode">下载二维码</v-btn>
-      </v-card-actions>
+              <v-btn color="primary" @click="downloadQRCode">下载二维码</v-btn>
+            </v-card-actions>
           </v-card>
         </v-carousel-item>
       </v-carousel>
@@ -112,7 +63,7 @@ const LINE_MODE = 'line' as const;
 
 const inputText = ref<string>('');
 const mode = ref<typeof SEGMENTED_MODE>(SEGMENTED_MODE);
-const segmentSize = ref<number>(128);
+const segmentSize = ref<number>(256);
 const lineSize = ref<number>(1);
 const qrCodes = ref<string[]>([]);
 const qrText = ref<string[]>([]);
@@ -137,8 +88,8 @@ const convertText = async () => {
   for (const segment of segments) {
     if (segment) {
       const qrCode = await QRCode.toDataURL(segment);
-    qrCodes.value.push(qrCode);
-    qrText.value.push(segment);
+      qrCodes.value.push(qrCode);
+      qrText.value.push(segment);
     }
 
   }
@@ -193,8 +144,9 @@ const downloadQRCode = () => {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background-color: rgba(0, 0,0,0, 0.9);
-  z-index: 1000; /* Ensure the info card appears above the QR code */
+  background-color: rgba(0, 0, 0, 0, 0.9);
+  z-index: 1000;
+  /* Ensure the info card appears above the QR code */
 }
 
 .qr-code-actions {
