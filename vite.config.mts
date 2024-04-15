@@ -6,8 +6,7 @@ import Layouts from 'vite-plugin-vue-layouts'
 import Vue from '@vitejs/plugin-vue'
 import VueRouter from 'unplugin-vue-router/vite'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import copy from 'rollup-plugin-copy';
-import { resolve } from 'path';
+import copyPlugin from 'rollup-plugin-copy'
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -17,7 +16,15 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig({
   base:'/text2qrcode/',
   build: {
-    outDir: 'docs' // 修改为您的 docs 目录路径
+    emptyOutDir: false,
+    outDir: 'docs', // 修改为您的 docs 目录路径
+    rollupOptions: {
+      plugins: [
+        copyPlugin({
+          targets: [{ src: '.nojekyll', dest: 'docs' },],
+        }),
+      ],
+    },
   },
   plugins: [
     VueRouter({
@@ -57,14 +64,6 @@ export default defineConfig({
           styles: 'wght@100;300;400;500;700;900',
         }],
       },
-    }),
-    copy({
-      targets: [
-        { src: '.nojekyll', dest: 'docs' },
-        // 添加其他需要复制的文件
-      ],
-      verbose: true, // 是否输出详细日志
-      flatten: false, // 是否保持源文件夹结构
     }),
   ],
   define: { 'process.env': {} },
