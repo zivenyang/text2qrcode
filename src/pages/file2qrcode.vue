@@ -2,6 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="6">
+        <h2>file2qrcode</h2>
         <v-file-input
           v-model="file"
           label="选择文件"

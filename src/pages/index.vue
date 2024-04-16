@@ -2,7 +2,8 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="6">
-        <v-textarea v-model="inputText" label="输入文本" rows="7" counter outlined clearable required
+        <h2>text2qrcode</h2>
+        <v-textarea v-model="inputText" label="输入文本" rows="5" counter outlined clearable required
           :rules="[v => !!v || '请输入文本']"></v-textarea>
 
         <v-radio-group v-model="mode" row>
